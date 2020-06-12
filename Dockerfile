@@ -10,6 +10,11 @@ RUN GOOS=linux GOARCH=amd64 make setup linux compress
 
 
 FROM ubuntu:bionic
+COPY --from=builder /app/config.yaml /etc/
 COPY --from=builder /app/.bin/github-app /bin/
 
-ENTRYPOINT /bin/github-app
+# Default service port
+EXPOSE 8080
+WORKDIR /etc
+ENTRYPOINT ["/bin/github-app"]
+CMD ["serve"]
