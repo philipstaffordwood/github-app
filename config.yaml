@@ -6,7 +6,7 @@ server:
 github:
   v3_api_url: "https://api.github.com/"
   app:
-    integration_id: !!env GH_INTEGRATION_ID
+    integration_id: 1 # !!env GH_INTEGRATION_ID
     webhook_secret: !!env GH_WEBHOOK_SECRET
     private_key: !!env GH_PRIVATE_KEY
 app_configuration:

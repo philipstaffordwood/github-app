@@ -45,21 +45,21 @@ install:
 docker:
 	docker build ./ -t $(NAME)
 
-.PHONY: serve-docs
-serve-docs:
-	docker run --rm -it -p 8000:8000 -v $(PWD):/docs -w /docs squidfunk/mkdocs-material:5.1.5
-
-.PHONY: build-api-docs
-build-api-docs:
-	go run main.go docs api  pkg/types/config.go pkg/types/types.go pkg/types/nsx.go  > docs/reference/config.md
-	go run main.go docs cli "docs/cli"
-
-.PHONY: build-docs
-build-docs:
-	which mkdocs || pip install mkdocs mkdocs-material
-	mkdocs build -d build/docs
-
-#TODO: deploy docs
+#TODO: docs
+#.PHONY: serve-docs
+#serve-docs:
+#	docker run --rm -it -p 8000:8000 -v $(PWD):/docs -w /docs squidfunk/mkdocs-material:5.1.5
+#
+#.PHONY: build-api-docs
+#build-api-docs:
+#	go run main.go docs api  pkg/types/config.go pkg/types/types.go pkg/types/nsx.go  > docs/reference/config.md
+#	go run main.go docs cli "docs/cli"
+#
+#.PHONY: build-docs
+#build-docs:
+#	which mkdocs || pip install mkdocs mkdocs-material
+#	mkdocs build -d build/docs
+#
 #.PHONY: deploy-docs
 #deploy-docs:
 #	which netlify 2>&1 > /dev/null || sudo npm install -g netlify-cli

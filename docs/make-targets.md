@@ -15,10 +15,10 @@
 * `compress`       - Uses UPX to compress the executable
 * `docker`         - Build docker image
 
-## Documentation
-* `serve-docs`     - Serves the MkDocs docs locally
-* `build-api-docs` - Build golang docs
-* `build-docs`     - Build MkDocs docs
+[//]: # (TODO: ## Documentation)
+[//]: # (TODO: * `serve-docs`     - Serves the MkDocs docs locally)
+[//]: # (TODO: * `build-api-docs` - Build golang docs)
+[//]: # (TODO: * `build-docs`     - Build MkDocs docs)
 
 [//]: # (TODO: * `deploy-docs`    - Deploy MkDocs to Netlify)
 
