@@ -14,7 +14,7 @@ help:
 	@cat docs/make-targets.md
 
 .PHONY: release
-release: setup pack linux darwin compress
+release: setup linux darwin compress
 
 .PHONY: setup
 setup:
@@ -24,11 +24,6 @@ setup:
 .PHONY: build
 build:
 	go build -o ./.bin/$(NAME) -ldflags "-X \"main.version=$(VERSION)\""  main.go
-
-.PHONY: pack
-pack: setup
-	esc --prefix "manifests/" --ignore "static.go" -o manifests/static.go --pkg manifests manifests
-	esc --prefix "templates/" --ignore "static.go" -o templates/static.go --pkg templates templates
 
 .PHONY: linux
 linux:
@@ -71,5 +66,5 @@ build-docs:
 #	netlify deploy --site b7d97db0-1bc2-4e8c-903d-6ebf3da18358 --prod --dir build/docs
 
 .PHONY: lint
-lint: pack build
+lint: build
 	golangci-lint run --verbose --print-resources-usage
