@@ -4,7 +4,7 @@ on:
     tags:
       - "*"
 jobs:
-  release:
+  binary-release:
     runs-on: ubuntu-latest
     container:
       image: flanksource/build-tools:0.6
