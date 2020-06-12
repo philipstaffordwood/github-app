@@ -18,7 +18,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          name: ${{ env.REPOSITORY_NAME}}/github-app
+          name: ${{ env.REPOSITORY_OWNER}}/${{ env.REPOSITORY_NAME}}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tag_names: true
