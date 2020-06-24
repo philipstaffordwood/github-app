@@ -7,7 +7,7 @@ package server
 import (
 	"github.com/flanksource/commons/logger"
 	"github.com/flanksource/github-app/config"
-	"github.com/flanksource/github-app/server/handlers"
+	"github.com/flanksource/github-app/server/handler"
 	"github.com/google/go-github/v31/github"
 	"github.com/gregjones/httpcache"
 	"github.com/palantir/go-baseapp/baseapp"
@@ -48,11 +48,11 @@ func New(config *config.Config, logger zerolog.Logger) (*baseapp.Server, error) 
 
 	registerOAuth2Handler(config.Github)
 
-	checkRunHandler := &handlers.StatusHandler{
+	checkRunHandler := &handler.CheckRunHandler{
 		ClientCreator: cc,
 	}
 
-	checkSuiteHandler := &handlers.CheckSuiteHandler{
+	checkSuiteHandler := &handler.CheckSuiteHandler{
 		ClientCreator: cc,
 	}
 

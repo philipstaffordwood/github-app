@@ -23,8 +23,13 @@ var Serve = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("error reading config file %v: %v",configFile, err)
 		}
+		f, err := os.OpenFile("testlogfile", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		logger := zerolog.New(f).With().Timestamp().Logger()
 
-		logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
 
 		server, err := server.New(config, logger)
 		if err != nil {
