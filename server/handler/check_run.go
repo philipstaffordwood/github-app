@@ -150,30 +150,7 @@ func (h *CheckRunHandler) Handle(ctx context.Context, eventType, deliveryID stri
 	aClient, err := h.NewAppClient()
 	//pClient := getPatClient(ctx, h.Secrets.GhPat)
 
-	//base := &http.Client{Transport: http.DefaultTransport}
-	//installation, transportError := newAppInstallation(h.Config.Github.App.IntegrationID, []byte(h.Config.Github.App.PrivateKey), h.Config.Github.V3APIURL)
-	//
-	//middleware := []http.RoundTripper{installation}
-	//
-	//client, err := c.newClient(base, middleware, "application", 0)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//if *transportError != nil {
-	//	return nil, *transportError
-	//}
 
-	//myCtx := context.TODO()
-	//ts := oauth2.StaticTokenSource(
-	//	&oauth2.Token{AccessToken: h.Secrets.GhPat},
-	//)
-	//tc := oauth2.NewClient(myCtx, ts)
-	//
-	//myClient := github.NewClient(tc)
-	//
-	////client = getPatClient(ctx, h.Secrets.GhPat)
-	//
-	//
 	title := "Test Results"
 	summary := r.String()
 	//
