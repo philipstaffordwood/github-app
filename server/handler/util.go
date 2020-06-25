@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/google/go-github/v32/github"
+	"golang.org/x/oauth2"
 )
 
 func GetWorkflowRun(ctx context.Context, client github.Client, repoOwner string, repoName string, branch string, headSHA string )  (*github.WorkflowRun, error) {
@@ -26,3 +27,16 @@ func GetWorkflowRun(ctx context.Context, client github.Client, repoOwner string,
 	}
 	return nil, fmt.Errorf("no matching workflow run found")
 }
+
+// getPatClient returns a github client that uses the given
+// Personal Access Token to authenticate
+// NOTE: this is a workaround for issues experienced with using
+//       githubapp.ClientCreator.NewAppClient()
+func getPatClient(ctx context.Context, pat string) *github.Client {
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: pat},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+	return github.NewClient(tc)
+}
+

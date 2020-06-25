@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/flanksource/build-tools/pkg/junit"
+	"github.com/flanksource/github-app/config"
 	"github.com/google/go-github/v32/github"
 	"github.com/palantir/go-githubapp/githubapp"
 	"github.com/pkg/errors"
@@ -22,6 +23,7 @@ import (
 )
 
 type CheckRunHandler struct {
+	config.Config
 	githubapp.ClientCreator
 
 	preamble string
@@ -68,32 +70,6 @@ func (h *CheckRunHandler) Handle(ctx context.Context, eventType, deliveryID stri
 	k8s := data[0]
 	suite := data[1]
 
-
-	getStrRef := func (myString string) *string {
-		return &myString
-	}
-	getIntRef := func (myInt int) *int {
-		return &myInt
-	}
-	title := "Test Title"
-	summary := "Test Summary"
-	_, _, err = client.Checks.UpdateCheckRun(ctx, repoOwner, repoName, *cr.ID, github.UpdateCheckRunOptions{
-		Output: &github.CheckRunOutput{
-			Title:       &title,
-			Summary:     &summary,
-			Annotations: []*github.CheckRunAnnotation{{
-				Path:            getStrRef("test/test.sh"),
-				StartLine:       getIntRef(1),
-				EndLine:         getIntRef(1),
-				AnnotationLevel: getStrRef("notice"),
-				Message:         getStrRef("Test Message"),
-				Title:           getStrRef("Test Title"),
-			}},
-		},
-	})
-	if err != nil {
-		return err
-	}
 
 	// ☹️ no easy direct way to go from the check run to the workflow run
 	// so we get this first page of workflow runs for this owner/repo
@@ -167,15 +143,44 @@ func (h *CheckRunHandler) Handle(ctx context.Context, eventType, deliveryID stri
 		return err
 	}
 
-	title = "Test Results"
-	summary = r.String()
 
-	client, err = h.NewInstallationClient(installationID)
-	if err != nil {
-		return errors.Wrapf(err, "failed to get github client from installationID %s given in event", installationID)
-	}
 
-	_, _, err = client.Checks.UpdateCheckRun(ctx, repoOwner, repoName, *cr.ID, github.UpdateCheckRunOptions{
+	//inst := event.GetInstallation()
+	//iClient, err := h.NewInstallationClient(*inst.ID)
+	aClient, err := h.NewAppClient()
+	//pClient := getPatClient(ctx, h.Secrets.GhPat)
+
+	//base := &http.Client{Transport: http.DefaultTransport}
+	//installation, transportError := newAppInstallation(h.Config.Github.App.IntegrationID, []byte(h.Config.Github.App.PrivateKey), h.Config.Github.V3APIURL)
+	//
+	//middleware := []http.RoundTripper{installation}
+	//
+	//client, err := c.newClient(base, middleware, "application", 0)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//if *transportError != nil {
+	//	return nil, *transportError
+	//}
+
+	//myCtx := context.TODO()
+	//ts := oauth2.StaticTokenSource(
+	//	&oauth2.Token{AccessToken: h.Secrets.GhPat},
+	//)
+	//tc := oauth2.NewClient(myCtx, ts)
+	//
+	//myClient := github.NewClient(tc)
+	//
+	////client = getPatClient(ctx, h.Secrets.GhPat)
+	//
+	//
+	title := "Test Results"
+	summary := r.String()
+	//
+	//myCr,_,_ := myClient.Checks.GetCheckRun(myCtx, repoOwner, repoName, *event.CheckRun.ID)
+	//fmt.Printf("%v", *myCr.ID)
+	//
+	_, _, err = aClient.Checks.UpdateCheckRun(ctx, repoOwner, repoName, *event.CheckRun.ID, github.UpdateCheckRunOptions{
 		Output: &github.CheckRunOutput{
 			Title:       &title,
 			Summary:     &summary,
@@ -185,10 +190,21 @@ func (h *CheckRunHandler) Handle(ctx context.Context, eventType, deliveryID stri
 	if err != nil {
 		return err
 	}
-
-
-
 	return nil
+
 }
 
-
+//func newAppInstallation(integrationID int64, privKeyBytes []byte, v3BaseURL string) (*http.RoundTripper, *error) {
+//	var transportError error
+//	installation := func(next http.RoundTripper) http.RoundTripper {
+//		itr, err := ghinstallation.NewAppsTransport(next, integrationID, privKeyBytes)
+//		if err != nil {
+//			transportError = err
+//			return next
+//		}
+//		// leaving the v3 URL since this is used to refresh the token, not make queries
+//		itr.BaseURL = strings.TrimSuffix(v3BaseURL, "/")
+//		return itr
+//	}
+//	return installation, &transportError
+//}
